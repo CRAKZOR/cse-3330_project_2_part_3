@@ -11,9 +11,10 @@ import { useEffect, useState, useRef } from 'react';
 
 const axios = require('axios').default;
 
-const Home = () => {
+const Home = (props) => {
 
-  const [ initialized, setInitialized ] = useState(false);
+  const { initialized } = props;
+
   const [ statement, setStatement ] = useState([]);
   const [ form, setForm ] = useState("");
 
@@ -38,15 +39,7 @@ const Home = () => {
   //   }
   // }, [])
   
-  useEffect(() => {
-    if (!initialized) {
-      axios.get('/api/database/init').then(() => {
-        setInitialized(true);
-      }).catch(err => {
-        alert(err.response.status);
-      });
-    }
-  }, [initialized])
+
 
   const handleChange = (e) => {
     setForm(e.target.value);
