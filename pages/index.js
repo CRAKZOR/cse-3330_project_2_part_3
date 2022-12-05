@@ -1,12 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css';
 
 import Container from 'react-bootstrap/Container';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Table from 'react-bootstrap/Table';
 
 import { useEffect, useState, useRef } from 'react';
 
@@ -25,6 +24,20 @@ const Home = () => {
 
   const formRef = useRef();
 
+  // useEffect(() => {
+  //   // clean up
+  //   if (initialized) {
+  //     return () => {
+  //       axios.delete('/api/database').then(() => {
+  //         console.log("clean up")
+  //         setInitialized(true);
+  //       }).catch(err => {
+  //         alert(err.response.status);
+  //       });
+  //     }
+  //   }
+  // }, [])
+  
   useEffect(() => {
     if (!initialized) {
       axios.get('/api/database/init').then(() => {
@@ -54,6 +67,7 @@ const Home = () => {
   useEffect(() => {
     if (loading) {
       axios.get('/api/database', { params: { statement: statement.join(' ') } }).then(results => {
+        setResults(results.data);
         setRetStatus(1);
         setLoading(false);
       }).catch(err => {
@@ -70,9 +84,9 @@ const Home = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setStatement((results.length || retStatus===-1) ? [form] : [...statement, form]);
+    setStatement((retStatus !== 0) ? [form] : [...statement, form]);
   }
-
+  
   const getStatementColor = () => {
     switch (retStatus) {
       case -1: {
@@ -85,6 +99,35 @@ const Home = () => {
         ""
       }
     }
+  }
+
+  const getRandomNum = (max) => Math.floor(Math.random()*max);
+
+  const renderResults = () => {
+    const headers = Object.keys(results[0]);
+
+    return (
+      <Table className="text-white" size="sm">
+        <thead>
+          <tr>
+            { headers.map(h => <th key={h + getRandomNum(100).toString()}>{h}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            results.map( (r,i) => {
+              return (
+                <tr key={`result-row-${i}-${getRandomNum(100).toString()}`}>
+                  { 
+                    Object.values(r).map((col, colIndex) => <td key={`result-row-${i}-col-${colIndex}-{${getRandomNum(100).toString()}`}>{col}</td>)
+                  }
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </Table>
+    )
   }
 
   return (
@@ -127,10 +170,10 @@ const Home = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <div className={`lead ${getStatementColor()}`} >
                       {statement.map(s => (
-                        <h5 key={s+Math.random()} className='m-0'>{s}</h5>
+                        <h5 key={s+getRandomNum(100).toString()} className='m-0'>{s}</h5>
                       ))}
                     </div>
-                    <Button onClick={() => setStatement([])}><i className="bi bi-eraser" style={{fontSize: "1.4em"}}></i></Button>
+                    <Button size="sm" onClick={() => setStatement([])}><i className="bi bi-x-lg"></i></Button>
                   </div>
                 )
               }
@@ -147,6 +190,7 @@ const Home = () => {
                 <div className="w-100 mt-4">
                   Results:
                   <hr/>
+                  {renderResults()}
                 </div>
               )
             )
