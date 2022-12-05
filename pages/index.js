@@ -178,7 +178,7 @@ const Home = (props) => {
 
           { loading ? 
             (
-              <Col xs={12}><Spinner animation="grow" /></Col>
+              <Col xs={12} style={{height: '25vh'}} className="d-flex justify-content-center align-items-center"><div ><Spinner animation="grow" /></div></Col>
             ) : (
               results.length > 0 && (
                 <Col xs={12}>
