@@ -1,6 +1,8 @@
 import Head from 'next/head'
 
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -64,7 +66,8 @@ const Home = (props) => {
         setRetStatus(1);
         setLoading(false);
       }).catch(err => {
-        alert(err.response.data.error);
+        // alert(err.response.data.error);
+        setResults([]);
         setRetStatus(-1);
         setLoading(false);
       });
@@ -124,22 +127,22 @@ const Home = (props) => {
   }
 
   return (
-    <Container className="h-100 py-4">
+    <Container fluid className="h-100 py-4">
       <Head>
         <title>Car Rental DB</title>
         <meta name="description" content="A car rental database" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="h-100">
-        <div className="h-100 d-flex flex-column align-items-center gap-3">
+      <main>
+        <Row className="h-100 d-flex flex-column align-items-center gap-3">
 
-          <div>
-            <h1 className="display-1">
-              Car Rental Database
+          <Col xs={12}>
+            <h1 className="display-1 text-center">
+              <i className="bi bi-car-front"></i> Rental Database
             </h1>
-          </div>
-          <div style={{width: '50%'}}>
+          </Col>
+          <Col xs={12} md={8} xl={6} xxl={4} >
             <Form onSubmit={handleSubmit}>
               <FloatingLabel
                 controlId="floatingInput"
@@ -153,6 +156,7 @@ const Home = (props) => {
                   onChange={handleChange}
                   placeholder="Enter an SQL statement"
                   autoFocus
+                  autoComplete="off"
                   ref={formRef}
                 />
               </FloatingLabel>
@@ -160,37 +164,34 @@ const Home = (props) => {
             
               {
                 statement.length > 0 && (
-                  <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex justify-content-start gap-3">
+                  { retStatus !== 1 && <Button size="sm" onClick={() => setStatement([])} variant="outline-secondary"><i className="bi bi-trash3-fill"></i></Button>}
                     <div className={`lead ${getStatementColor()}`} >
                       {statement.map(s => (
                         <h5 key={s+getRandomNum(100).toString()} className='m-0'>{s}</h5>
                       ))}
                     </div>
-                    <Button size="sm" onClick={() => setStatement([])}><i className="bi bi-x-lg"></i></Button>
                   </div>
                 )
               }
-              <div style={{display: 'flex 0 0 150px'}}>
-                
-              </div>
-          </div>
+          </Col>
 
           { loading ? 
             (
-              <Spinner animation="grow" />
+              <Col xs={12}><Spinner animation="grow" /></Col>
             ) : (
               results.length > 0 && (
-                <div className="w-100 mt-4">
-                  Results:
+                <Col xs={12}>
+                  <strong>{results.length}</strong> Results:
                   <hr/>
                   {renderResults()}
-                </div>
+                </Col>
               )
             )
           }
 
 
-        </div>
+        </Row>
 
       </main>
 
