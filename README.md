@@ -5,6 +5,10 @@ Node version >=16
 
 First, run the development server:
 
+ ```bash
+git clone https://github.com/CRAKZOR/cse-3330_project_2_part_3.git
+```
+
 ```bash
 npm run dev
 # or
