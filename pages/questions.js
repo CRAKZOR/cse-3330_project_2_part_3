@@ -232,13 +232,13 @@ const QuestionsPage = () => {
                         V.VehicleID=\'${form.q4.vehicleID}\';
                 `.replaceAll('\n', '').replace(/ +/g,' ');
                 return axios.get('/api/database', { params: { statement: query1 } }).then(results => {
-                    if (!results.data.length) alert("No results");
-                    const { CustId, TotalAmount } = results.data[0];
+                    if (!results.data.length) return alert("No results");
+                    const { CustID, TotalAmount } = results.data[0];
                     const query2 =  `
                         UPDATE RENTAL
                         SET Returned=1
                         WHERE 
-                            CustID=\'${CustId}\' AND
+                            CustID=\'${CustID}\' AND
                             ReturnDate=\'${form.q4.returnDate}\' AND
                             VehicleID=\'${form.q4.vehicleID}\';
                     `.replaceAll('\n', '').replace(/ +/g,' ');
