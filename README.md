@@ -1,3 +1,6 @@
+## Requirements:
+Node version >=16
+
 ## Getting Started
 
 First, run the development server:
