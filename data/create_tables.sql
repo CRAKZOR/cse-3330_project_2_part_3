@@ -19,7 +19,7 @@ CREATE TABLE Rate (
 
 -- -- VEHICLE
 CREATE TABLE Vehicle (
-    VehicleId CHAR(17) NOT NULL,
+    VehicleID VARCHAR(255) NOT NULL,
     Description VARCHAR(255) NOT NULL,
     Year CHAR(4) NOT NULL,
     Type INTEGER NOT NULL,              -- 1: Compact ... 6: VAN

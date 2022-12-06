@@ -7,16 +7,11 @@ let initialized = fs.existsSync("./data/initialized.txt");
 
 let db = (() => {
 
-
-    console.log(initialized);
-    
-    if (initialized) {
-        try {
-            fs.rmSync("./data/rental.db");
-        } catch (e) {
-            // do nothing
-        }
-    
+    if (!initialized)
+    try {
+        fs.rmSync("./data/rental.db");
+    } catch (e) {
+        // do nothing
     }
 
     let db = new sqlite3.Database('./data/rental.db');
@@ -54,16 +49,28 @@ let db = (() => {
             .on('data', (row) => {
                 insRental.run( row.CustID, row.VehicleID, row.StartDate, row.OrderDate, row.RentalType, row.Qty, row.ReturnDate, row.TotalAmount, row.PaymentDate );
             })
+
+            db.exec(`
+            ALTER TABLE RENTAL
+            ADD Returned INTEGER;
+            
+            UPDATE RENTAL
+            SET Returned=1
+            WHERE PaymentDate != "NULL";
+            
+            UPDATE RENTAL
+            SET Returned=0
+            WHERE PaymentDate = "NULL";`);
     
             console.log("initalized");    
             fs.writeFileSync("./data/initialized.txt", "alfredo dummy")
         }) 
     } else {
-        try {
-            fs.rmSync("./data/initialized.txt");
-        } catch (e) {
-            // do nothing
-        }
+        // try {
+        //     fs.rmSync("./data/initialized.txt");
+        // } catch (e) {
+        //     // do nothing
+        // }
     }
     
     return db;

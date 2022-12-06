@@ -1,7 +1,3 @@
-import Head from 'next/head'
-
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
@@ -10,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Table from 'react-bootstrap/Table';
 
 import { useEffect, useState, useRef } from 'react';
+
 
 const axios = require('axios').default;
 
@@ -103,7 +100,7 @@ const Home = (props) => {
     const headers = Object.keys(results[0]);
 
     return (
-      <Table className="text-white" size="sm">
+      <Table className="text-white overflow-auto" size="sm">
         <thead>
           <tr>
             { headers.map(h => <th key={h + getRandomNum(100).toString()}>{h}</th>)}
@@ -127,21 +124,9 @@ const Home = (props) => {
   }
 
   return (
-    <Container fluid className="h-100 py-4">
-      <Head>
-        <title>Car Rental DB</title>
-        <meta name="description" content="A car rental database" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-      <main>
-        <Row className="h-100 d-flex flex-column align-items-center gap-3">
 
-          <Col xs={12}>
-            <h1 className="display-1 text-center">
-              <i className="bi bi-car-front"></i> Rental Database
-            </h1>
-          </Col>
+      <>
           <Col xs={12} md={8} xl={6} xxl={4} >
             <Form onSubmit={handleSubmit}>
               <FloatingLabel
@@ -183,19 +168,14 @@ const Home = (props) => {
               results.length > 0 && (
                 <Col xs={12}>
                   <strong>{results.length}</strong> Results:
-                  <hr/>
+                  <hr/> 
                   {renderResults()}
                 </Col>
               )
             )
           }
 
-
-        </Row>
-
-      </main>
-
-    </Container>
+      </>
   )
 }
 
