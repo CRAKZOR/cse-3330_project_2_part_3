@@ -1,3 +1,0 @@
-bak
-
-"dev": "nodemon --watch server ./server/index.js"
